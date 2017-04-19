@@ -1,4 +1,8 @@
-var fcm = require('./fcm');
+//var fcm = require('./fcm');
+var FCM = require('fcm-node');
+var apikey = require('./fcm-creds').apikey;
+var fcm = new FCM(apikey);
+
 var DeviceRegistrationToken = 'reg-token';
 var topic1 = '/topics/main';
 
@@ -7,6 +11,9 @@ var app        = express();
 
 var message = {
  to: topic1,  // either DeviceRegistrationToken or topic1
+ data: {
+  'message': 'hello from node'
+ },
  notification: {
      title: 'Test message',
      body: 'Hello Nodejs'
@@ -37,15 +44,15 @@ console.log('Magic happens in 8080');
 router.route('/push')
 .get(function(req, res, next) {
 
-  /*fcm.send(message, function(err, response){
+  fcm.send(message, function(err, response){
     if (err) {
         console.log(err);
     } else {
       console.log("Successfully sent with response: ", response);
     }
-  });*/
+  });
 
-  fcm.FCMNotificationBuilder()
+  /*fcm.FCMNotificationBuilder()
     .setTopic('main')
     .addData('Test message')
     .send(function(err, res) {
@@ -53,7 +60,7 @@ router.route('/push')
        console.log('FCM error:', err);
 
        console.log('res', res);
-    });
+    });*/
 
   res.send("notification sent");
 
